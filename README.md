@@ -1,6 +1,6 @@
 # Retrieval-Augmented-Generation
 
-Think in services, even locally:
+## Organize everything in services, even locally:
 
 1) PDFs
 2) Document Loader
@@ -11,3 +11,12 @@ Think in services, even locally:
 7) LLM (local)
 8) API (FastAPI)
 9) UI (optional)
+
+## Technology Stack
+
+- LLM: Choose [Ollama](https://ollama.com/) over LM Studio, because it is fully open-source, supports my hardware setup, and is known for its simplicity.
+- PDF Processing: [PyMuPDF4LLM](https://pymupdf.readthedocs.io/en/latest/pymupdf4llm/index.html), because it is efficient and supports OCR, office documents (paid version) and LLM frameworks with RAG (like [LlamaIndex](https://github.com/run-llama/llama_index)), optionally with [Unstructured](https://unstructured.io/blog/how-to-process-pdf-in-python). 
+- Local embeddings: [BAAI/bge-base-en-v1.5](https://huggingface.co/BAAI/bge-base-en-v1.5) or Qdrant FastEmbed Embeddings 
+- Vector database: [Qdrant Vector Store](https://github.com/qdrant/qdrant), because it allows many applications and it kubernetes-native.  
+- RAG framework: [LlamaIndex](https://github.com/run-llama/llama_index) instead of LangChain
+- API Layer: [FastAPI](https://fastapi.tiangolo.com/)?
