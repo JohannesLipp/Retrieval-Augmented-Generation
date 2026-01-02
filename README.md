@@ -1,5 +1,9 @@
 # Retrieval-Augmented-Generation
 
+Based on https://developers.llamaindex.ai/python/examples/low_level/oss_ingestion_retrieval/
+
+Hardware: HP OmniBook X Flip 16-as0178ng (16,0" 2.8k OLED Touch, Intel Core Ultra 7 258V (8C), 32GB RAM, 2TB SSD, Windows 11) 
+
 ## Organize everything in services, even locally:
 
 1) PDFs
@@ -20,3 +24,17 @@
 - Vector database: [Qdrant Vector Store](https://github.com/qdrant/qdrant), because it allows many applications and it kubernetes-native.  
 - RAG framework: [LlamaIndex](https://github.com/run-llama/llama_index) instead of LangChain
 - API Layer: [FastAPI](https://fastapi.tiangolo.com/)?
+
+## Step-by-step Instructions
+- Download Docker and enable Kubernetes support
+  - Verify via `docker --version` and `kubectl cluster-info`
+- Download [Helm](https://github.com/helm/helm/releases)  
+  - Verify via `helm version`
+- Run Qdrant vector store
+  - `helm repo add qdrant https://qdrant.to/helm`
+  - `helm install qdrant qdrant/qdrant`
+  - Verify 
+    - In a new terminal expose port `kubectl port-forward service/qdrant 6333:6333`
+    - `kubectl get pods`
+    - `curl localhost:6333`
+- Continue in the [RAG Jupyter Notebook](RAG.ipynb)
