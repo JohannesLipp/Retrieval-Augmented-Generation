@@ -1,4 +1,3 @@
-from llama_index.core import StorageContext
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
@@ -15,6 +14,7 @@ Settings.llm = Ollama(
 documents = SimpleDirectoryReader("data").load_data()
 index = VectorStoreIndex.from_documents(
     documents,
+
     # we can optionally override the embed_model here
     # embed_model=Settings.embed_model,
 )
