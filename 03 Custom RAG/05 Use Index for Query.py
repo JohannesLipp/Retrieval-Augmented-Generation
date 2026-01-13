@@ -1,10 +1,10 @@
 import asyncio
 
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
+from llama_index.core import Settings
+from llama_index.core import StorageContext, load_index_from_storage
 from llama_index.core.agent.workflow import AgentWorkflow
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
-from llama_index.core import StorageContext, load_index_from_storage
 
 # Settings control global defaults
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-base-en-v1.5")
@@ -15,26 +15,9 @@ Settings.llm = Ollama(
     context_window=8000,
 )
 
-# Create a RAG tool using LlamaIndex
-
 storage_context = StorageContext.from_defaults(persist_dir="storage")
-
-index = load_index_from_storage(
-    storage_context,
-    # we can optionally override the embed_model here
-    # it's important to use the same embed_model as the one used to build the index
-    # embed_model=Settings.embed_model,
-)
-
-query_engine = index.as_query_engine(
-    # we can optionally override the llm here
-    # llm=Settings.llm,
-)
-
-
-def multiply(a: float, b: float) -> float:
-    """Useful for multiplying two numbers."""
-    return a * b
+index = load_index_from_storage(storage_context)
+query_engine = index.as_query_engine()
 
 
 async def search_documents(query: str) -> str:
@@ -45,17 +28,16 @@ async def search_documents(query: str) -> str:
 
 # Create an enhanced workflow with both tools
 agent = AgentWorkflow.from_tools_or_functions(
-    [multiply, search_documents],
+    [search_documents],
     llm=Settings.llm,
-    system_prompt="""You are a helpful assistant that can perform calculations
-    and search through documents to answer questions.""",
+    system_prompt="""You are a helpful assistant that can search through documents to answer questions.""",
 )
 
 
 # Now we can ask questions about the documents or do calculations
 async def main():
     response = await agent.run(
-        "Which grad schools did the author apply to?"
+        "What contributions in the field of OPC UA did the author make?"
     )
     print(response)
 

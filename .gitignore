@@ -263,6 +263,6 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm+all
 
-01 Basic Examples/storage/**
-02 My RAG/data/**
-02 My RAG/storage/**
+02 Basic RAG/storage/**
+03 Custom RAG/data/**
+03 Custom RAG/storage/**

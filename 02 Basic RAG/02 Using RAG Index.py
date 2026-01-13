@@ -16,32 +16,45 @@ Settings.llm = Ollama(
 )
 
 storage_context = StorageContext.from_defaults(persist_dir="storage")
-index = load_index_from_storage(storage_context)
-query_engine = index.as_query_engine()
+
+index = load_index_from_storage(
+    storage_context,
+    # we can optionally override the embed_model here
+    # it's important to use the same embed_model as the one used to build the index
+    # embed_model=Settings.embed_model,
+)
+
+query_engine = index.as_query_engine(
+    # we can optionally override the llm here
+    # llm=Settings.llm,
+)
+
+
+def multiply(a: float, b: float) -> float:
+    """Useful for multiplying two numbers."""
+    return a * b
 
 
 async def search_documents(query: str) -> str:
-    """Useful for answering natural language questions about an personal essay written by Paul Graham."""
+    """Useful for answering natural language questions about a personal essay written by Paul Graham."""
     response = await query_engine.aquery(query)
     return str(response)
 
 
-# Create an enhanced workflow with both tools
 agent = AgentWorkflow.from_tools_or_functions(
-    [search_documents],
+    [multiply, search_documents],
     llm=Settings.llm,
-    system_prompt="""You are a helpful assistant that can search through documents to answer questions.""",
+    system_prompt="""You are a helpful assistant that can perform calculations
+    and search through documents to answer questions.""",
 )
 
 
-# Now we can ask questions about the documents or do calculations
 async def main():
     response = await agent.run(
-        "What are the core components of the Digital Shadow Metamodel?"
+        "Which grad schools did the author Paul apply to?"
     )
     print(response)
 
 
-# Run the agent
 if __name__ == "__main__":
     asyncio.run(main())

@@ -14,7 +14,6 @@ Settings.llm = Ollama(
 documents = SimpleDirectoryReader("data").load_data()
 index = VectorStoreIndex.from_documents(
     documents,
-
     # we can optionally override the embed_model here
     # embed_model=Settings.embed_model,
 )
